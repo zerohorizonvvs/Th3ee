@@ -505,6 +505,31 @@
     background-position: center;
     background-repeat: no-repeat;
   }
+  .pv-coming {
+    background: linear-gradient(135deg, #F0F4FF 0%, #E8ECFF 50%, #F5F0FF 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .plaza-card-coming {
+    opacity: 0.85;
+    border-style: dashed;
+    border-color: #B8C4FF;
+  }
+  .plaza-card-coming:hover {
+    opacity: 1;
+    transform: none;
+    box-shadow: none;
+    border-color: #8BA4FF;
+  }
+  .coming-icon {
+    font-size: 64px;
+    filter: grayscale(20%);
+  }
+  .plaza-tag.pt-coming {
+    background: linear-gradient(135deg, #8BA4FF 0%, #B8C4FF 100%);
+    color: white;
+  }
   .plaza-visual-emoji {
     display: none;
   }
@@ -1144,9 +1169,178 @@
       padding: 12px 14px;
     }
   }
+  /* ===== 优惠券弹窗 ===== */
+  .coupon-popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    z-index: 10000;
+    background: linear-gradient(160deg, #FFF9E6 0%, #FFFFFF 50%, #F0FFF4 100%);
+    border-radius: 24px;
+    padding: 0;
+    width: 340px;
+    max-width: 90vw;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    border: 2px solid rgba(168,230,207,0.3);
+    overflow: hidden;
+    animation: couponPopIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+  .coupon-popup.show {
+    display: block;
+  }
+  @keyframes couponPopIn {
+    0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  }
+  .coupon-popup-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 9999;
+    backdrop-filter: blur(4px);
+  }
+  .coupon-popup-overlay.show {
+    display: block;
+  }
+  .coupon-header {
+    background: linear-gradient(135deg, #2FAF7E 0%, #6DC9A8 100%);
+    padding: 24px 20px 20px;
+    text-align: center;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+  .coupon-header-icon {
+    font-size: 48px;
+    margin-bottom: 8px;
+  }
+  .coupon-header-title {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 4px;
+  }
+  .coupon-header-sub {
+    font-size: 12px;
+    opacity: 0.9;
+  }
+  .coupon-body {
+    padding: 24px 20px;
+    text-align: center;
+  }
+  .coupon-amount {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #F6D860 0%, #FFD700 100%);
+    border-radius: 16px;
+    padding: 16px 32px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 16px rgba(246, 216, 96, 0.4);
+  }
+  .coupon-yuan {
+    font-size: 24px;
+    font-weight: 700;
+    color: #8B6914;
+  }
+  .coupon-price {
+    font-size: 48px;
+    font-weight: 900;
+    color: #8B6914;
+    line-height: 1;
+  }
+  .coupon-desc {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 12px;
+  }
+  .coupon-timer {
+    font-size: 13px;
+    color: #2FAF7E;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+  .coupon-timer span {
+    color: #FF6B6B;
+    font-weight: 800;
+  }
+  .coupon-btn {
+    display: block;
+    width: 100%;
+    padding: 14px 24px;
+    background: linear-gradient(135deg, #2FAF7E 0%, #3DAA82 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 16px rgba(47, 175, 126, 0.3);
+  }
+  .coupon-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(47, 175, 126, 0.4);
+  }
+  .coupon-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.9);
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+    transition: all 0.3s;
+  }
+  .coupon-close:hover {
+    background: #f0f0f0;
+    color: #333;
+  }
+  .coupon-countdown {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #FF6B6B, #F6D860);
+    animation: countdownShrink 600s linear forwards;
+  }
+  @keyframes countdownShrink {
+    from { width: 100%; }
+    to { width: 0%; }
+  }
 </style>
 </head>
 <body>
+
+<!-- ===== 优惠券弹窗 ===== -->
+<div class="coupon-popup-overlay" id="couponOverlay"></div>
+<div class="coupon-popup" id="couponPopup">
+  <div class="coupon-header">
+    <div class="coupon-countdown" id="couponCountdown"></div>
+    <button class="coupon-close" onclick="closeCouponPopup()">×</button>
+    <div class="coupon-header-icon">??</div>
+    <div class="coupon-header-title">新用户专属福利</div>
+    <div class="coupon-header-sub">限时优惠，先到先得</div>
+  </div>
+  <div class="coupon-body">
+    <div class="coupon-amount">
+      <span class="coupon-yuan">¥</span>
+      <span class="coupon-price">10</span>
+    </div>
+    <div class="coupon-desc">月卡首月优惠券<br>开通VIP会员，首月仅需 ¥15</div>
+    <div class="coupon-timer">剩余 <span id="couponTimer">10:00</span> 后消失</div>
+    <button class="coupon-btn" onclick="openVipModalFromCoupon()">立即开通 · ¥15</button>
+  </div>
+</div>
 
 <!-- ===== 导航栏 ===== -->
 <nav class="navbar" id="navbar">
@@ -1235,8 +1429,8 @@
     </h1>
 
     <p class="hero-subtitle fade-in fade-in-delay-2">
-      告别被动打扰，在互动里遇见心动好物<br>
-      让广告从"跳过"变成"想多玩一会儿"
+      3D交互探索优质好物<br>
+      让你的广告120秒"秒秒"不浪费
     </p>
   </div>
 
@@ -1346,6 +1540,22 @@
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12M9 4l5 4-5 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
           开始体验
         </a>
+      </div>
+    </div>
+
+    <!-- 更多好物预告 -->
+    <div class="plaza-card plaza-card-coming fade-in fade-in-delay-3">
+      <div class="plaza-card-visual pv-coming">
+        <div class="coming-icon">??</div>
+        <span class="plaza-visual-badge">?? 即将上线</span>
+      </div>
+      <div class="plaza-card-body">
+        <div class="plaza-brand">敬请期待</div>
+        <div class="plaza-card-title">更多优质好物即将入驻</div>
+        <div class="plaza-card-desc">护肤美妆、数码科技、家居生活...更多3D互动好物正在赶来的路上，敬请期待！</div>
+        <div class="plaza-tags">
+          <span class="plaza-tag pt-coming">?? 敬请期待</span>
+        </div>
       </div>
     </div>
 
@@ -1764,15 +1974,79 @@
   }
 
   // VIP弹窗
-  function openVipModal() {
+  function openVipModal(defaultPlan) {
     document.getElementById('vipModal').classList.add('active');
     document.body.style.overflow = 'hidden';
+    if (defaultPlan) {
+      const plans = document.querySelectorAll('.vip-plan');
+      plans.forEach(p => {
+        p.classList.remove('selected');
+        if (p.dataset.plan === defaultPlan) {
+          p.classList.add('selected');
+          document.getElementById('vipBuyBtn').textContent = '立即开通 · ¥' + p.dataset.price;
+        }
+      });
+    }
   }
 
   function closeVipModal() {
     document.getElementById('vipModal').classList.remove('active');
     document.body.style.overflow = '';
   }
+
+  // ===== 优惠券弹窗 =====
+  let couponTimer = null;
+  let couponSecondsLeft = 600; // 10分钟
+
+  function showCouponPopup() {
+    document.getElementById('couponPopup').classList.add('show');
+    document.getElementById('couponOverlay').classList.add('show');
+    document.body.style.overflow = 'hidden';
+    startCouponTimer();
+  }
+
+  function closeCouponPopup() {
+    document.getElementById('couponPopup').classList.remove('show');
+    document.getElementById('couponOverlay').classList.remove('show');
+    document.body.style.overflow = '';
+    if (couponTimer) {
+      clearInterval(couponTimer);
+      couponTimer = null;
+    }
+  }
+
+  function openVipModalFromCoupon() {
+    closeCouponPopup();
+    setTimeout(() => {
+      openVipModal('monthly');
+    }, 300);
+  }
+
+  function startCouponTimer() {
+    updateCouponDisplay();
+    couponTimer = setInterval(() => {
+      couponSecondsLeft--;
+      updateCouponDisplay();
+      if (couponSecondsLeft <= 0) {
+        closeCouponPopup();
+      }
+    }, 1000);
+  }
+
+  function updateCouponDisplay() {
+    const minutes = Math.floor(couponSecondsLeft / 60);
+    const seconds = couponSecondsLeft % 60;
+    document.getElementById('couponTimer').textContent =
+      String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
+  }
+
+  // 页面加载时显示优惠券弹窗
+  window.addEventListener('load', () => {
+    setTimeout(showCouponPopup, 800);
+  });
+
+  // 点击遮罩层也可关闭
+  document.getElementById('couponOverlay').addEventListener('click', closeCouponPopup);
 
   // 选择套餐
   function selectPlan(el) {
